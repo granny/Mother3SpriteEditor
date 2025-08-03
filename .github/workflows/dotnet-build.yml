@@ -19,6 +19,11 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
+    - name: Install .NET Framework 3.5
+      run: |
+        dism /online /enable-feature /featurename:NetFx3 /All /LimitAccess
+      shell: powershell # Use PowerShell for the command
+
     - name: Restore dependencies
       run: dotnet restore
 
