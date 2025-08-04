@@ -8,22 +8,25 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '3.5.x'
+    - name: Enable .NET Framework 3.5
+      run: |
+        Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -All
+      shell: pwsh
 
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Install .NET Framework 3.5 Developer Pack
+      run: |
+        Invoke-WebRequest -Uri "https://download.microsoft.com/download/7/8/9/789A9C6B-B1C0-4F73-BA7A-576339FBE6E6/NDP35SP1-KB3186497-x86-x64-AllOS-ENU.exe" -OutFile "ndp35.exe"
+        Start-Process ".\ndp35.exe" -ArgumentList "/q" -Wait
+      shell: pwsh
 
-    - name: Build
-      run: dotnet build
+    - name: Build the project
+      run: msbuild MOTHER3SpriteEditor/MOTHER3SpriteEditor.csproj /p:Configuration=Release
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
