@@ -21,7 +21,7 @@ jobs:
 
     - name: Install .NET Framework 3.5 Developer Pack
       run: |
-        Invoke-WebRequest -Uri "https://download.microsoft.com/download/7/8/9/789A9C6B-B1C0-4F73-BA7A-576339FBE6E6/NDP35SP1-KB3186497-x86-x64-AllOS-ENU.exe" -OutFile "ndp35.exe"
+        Invoke-WebRequest -Uri "https://download.microsoft.com/download/7/0/3/703455ee-a747-4cc8-bd3e-98a615c3aedb/dotNetFx35setup.exe" -OutFile "ndp35.exe"
         Start-Process ".\ndp35.exe" -ArgumentList "/q" -Wait
       shell: pwsh
 
