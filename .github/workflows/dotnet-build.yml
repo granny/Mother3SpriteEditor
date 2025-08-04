@@ -11,25 +11,20 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Enable .NET Framework 3.5
-      run: |
-        Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -All
-      shell: pwsh
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
 
-    - name: Install .NET Framework 3.5 Developer Pack
-      run: |
-        Invoke-WebRequest -Uri "https://download.microsoft.com/download/7/0/3/703455ee-a747-4cc8-bd3e-98a615c3aedb/dotNetFx35setup.exe" -OutFile "ndp35.exe"
-        Start-Process ".\ndp35.exe" -ArgumentList "/q" -Wait
-      shell: pwsh
+      - name: Restore NuGet packages
+        run: nuget restore MOTHER3SpriteEditor.sln
 
-    - name: Build the project
-      run: dotnet build
+      - name: Build with MSBuild
+        run: msbuild MOTHER3SpriteEditor.sln /p:Configuration=Release
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Mother3SpriteEditor
-        path: ./bin
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mother3SpriteEditor
+          path: '**\bin\Release'
